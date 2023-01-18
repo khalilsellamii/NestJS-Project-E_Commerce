@@ -72,4 +72,9 @@ export class CartService {
       return cart.save();
     }
   }
+
+  async getAllCarts(): Promise<Cart[]> {
+    const products = await this.cartModel.find().exec();
+    return products;
+  }
 }

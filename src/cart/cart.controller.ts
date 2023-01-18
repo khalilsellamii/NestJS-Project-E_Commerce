@@ -1,4 +1,5 @@
-import { Controller, Post, Body, Request, UseGuards, Delete, NotFoundException, Param } from '@nestjs/common';
+import { Controller, Get,Post, Body, Request, UseGuards, Delete, NotFoundException, Param } from '@nestjs/common';
+import { get } from 'http';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
@@ -10,6 +11,15 @@ import { ItemDTO } from './dtos/item.dto';
 export class CartController {
   constructor(private cartService: CartService) { }
 
+  
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User)
+  @Get('/AllCarts')
+  async getUsersCart(){
+    const allCarts = await this.cartService.getAllCarts();
+    return allCarts
+  }
+  
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.User)
   @Post('/')
